@@ -1,0 +1,428 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    font-family: 'Orbitron', monospace;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    color: white;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+}
+
+#gameContainer {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Screen Management */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+/* Main Menu Styles */
+.menu-content {
+    text-align: center;
+    z-index: 10;
+}
+
+.game-title {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    color: #ff6b35;
+    text-shadow: 
+        0 0 10px #ff6b35,
+        0 0 20px #ff6b35,
+        0 0 30px #ff6b35;
+    margin-bottom: 2rem;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #ff6b35, 0 0 20px #ff6b35, 0 0 30px #ff6b35; }
+    to { text-shadow: 0 0 15px #ff6b35, 0 0 25px #ff6b35, 0 0 35px #ff6b35; }
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.menu-btn {
+    background: linear-gradient(145deg, #ff6b35, #e55a2b);
+    border: none;
+    color: white;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    min-width: 200px;
+}
+
+.menu-btn:hover, .menu-btn:active {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+    background: linear-gradient(145deg, #e55a2b, #d14f21);
+}
+
+/* Instructions Screen */
+.instructions-content {
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+}
+
+.instructions-content h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    color: #ff6b35;
+    margin-bottom: 2rem;
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.control-icon {
+    font-size: 1.5rem;
+    min-width: 40px;
+}
+
+/* Game Screen */
+#gameScreen {
+    flex-direction: column;
+    padding: 0;
+}
+
+#gameUI {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 10px;
+}
+
+.health-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.player-info {
+    flex: 1;
+    max-width: 200px;
+}
+
+.player1-info {
+    text-align: left;
+}
+
+.player2-info {
+    text-align: right;
+}
+
+.player-name {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #ff6b35;
+}
+
+.health-bar-container {
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #fff;
+    border-radius: 10px;
+    padding: 3px;
+    height: 20px;
+}
+
+.health-bar {
+    background: linear-gradient(90deg, #4ade80, #22c55e, #16a34a);
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+    width: 100%;
+}
+
+.timer-container {
+    text-align: center;
+    margin: 0 20px;
+}
+
+#timer {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#roundInfo {
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    color: #ff6b35;
+    font-weight: 700;
+}
+
+#gameCanvas {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #87ceeb 0%, #98fb98 50%, #8b4513 100%);
+    display: block;
+}
+
+/* Touch Controls */
+#touchControls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 20px;
+    z-index: 200;
+    pointer-events: none;
+}
+
+.controls-left,
+.controls-right {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    pointer-events: auto;
+}
+
+.movement-pad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.movement-btn,
+.action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    backdrop-filter: blur(10px);
+    touch-action: manipulation;
+}
+
+.jump-btn {
+    margin-bottom: 5px;
+}
+
+.action-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+}
+
+.attack-btn {
+    background: rgba(255, 107, 53, 0.3);
+    border-color: rgba(255, 107, 53, 0.7);
+}
+
+.attack-btn.heavy {
+    background: rgba(220, 38, 127, 0.3);
+    border-color: rgba(220, 38, 127, 0.7);
+}
+
+.special-btn {
+    background: rgba(147, 51, 234, 0.3);
+    border-color: rgba(147, 51, 234, 0.7);
+}
+
+.guard-btn {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.7);
+}
+
+.movement-btn:active,
+.action-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.attack-btn:active {
+    background: rgba(255, 107, 53, 0.6);
+}
+
+.attack-btn.heavy:active {
+    background: rgba(220, 38, 127, 0.6);
+}
+
+.special-btn:active {
+    background: rgba(147, 51, 234, 0.6);
+}
+
+.guard-btn:active {
+    background: rgba(59, 130, 246, 0.6);
+}
+
+/* Game Over Screen */
+.game-over-content {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 107, 53, 0.5);
+}
+
+#gameOverTitle {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    color: #ff6b35;
+    margin-bottom: 1rem;
+}
+
+#winnerText {
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    font-weight: 700;
+    color: #4ade80;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.game-over-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .health-container {
+        padding: 0 10px;
+    }
+    
+    .player-info {
+        max-width: 120px;
+    }
+    
+    .movement-btn,
+    .action-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .action-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    #touchControls {
+        height: 160px;
+        padding: 15px;
+    }
+}
+
+@media (max-height: 600px) {
+    #touchControls {
+        height: 140px;
+    }
+    
+    .movement-btn,
+    .action-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .action-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 1.4rem;
+    }
+}
+
+/* Performance Optimizations */
+.movement-btn,
+.action-btn {
+    will-change: transform;
+}
+
+#gameCanvas {
+    will-change: transform;
+}
+
+/* Prevent scrolling and zooming */
+html, body {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+/* Disable text selection */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Optimize for mobile performance */
+* {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+}
